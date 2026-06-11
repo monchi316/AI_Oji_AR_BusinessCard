@@ -1,0 +1,20 @@
+{
+  "name": "ai_oji_ar_businesscard",
+  "version": "1.0.0",
+  "description": "MindAR WebAR page for an AR business card video overlay.",
+  "scripts": {
+    "compile:target": "node scripts/compile-target.mjs",
+    "start": "npx serve .",
+    "build": "echo \"Static site ready\""
+  },
+  "keywords": [
+    "mindar",
+    "webar",
+    "aframe",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "private": true
+}
