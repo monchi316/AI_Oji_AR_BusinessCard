@@ -4,7 +4,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: #101214;
+  background: transparent;
   color: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
 }
@@ -12,6 +12,11 @@ body {
 a-scene {
   width: 100vw;
   height: 100vh;
+  background: transparent !important;
+}
+
+a-scene canvas {
+  background: transparent !important;
 }
 
 .intro {
