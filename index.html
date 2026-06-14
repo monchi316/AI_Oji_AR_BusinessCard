@@ -8,6 +8,7 @@
     <title>AIおじ AR名刺</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="./chromakey.js"></script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -48,15 +49,15 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity id="target" mindar-image-target="targetIndex: 0">
-        <a-video
+        <a-plane
           id="videoPlane"
-          src="#cardVideo"
           width="0.995"
           height="0.6017"
           position="-0.006 0.072 0"
           rotation="0 0 0"
+          material="shader: white-chroma-key; src: #cardVideo; keyColor: #fff8f2; similarity: 0.24; smoothness: 0.1; spill: 0.06; transparent: true; depthWrite: false"
           visible="false"
-        ></a-video>
+        ></a-plane>
       </a-entity>
     </a-scene>
 
