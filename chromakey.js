@@ -1,10 +1,9 @@
 AFRAME.registerShader("white-chroma-key", {
   schema: {
     src: { type: "map", is: "uniform" },
-    keyColor: { type: "color", default: "#fff8f2", is: "uniform" },
-    similarity: { type: "number", default: 0.22, is: "uniform" },
-    smoothness: { type: "number", default: 0.09, is: "uniform" },
-    spill: { type: "number", default: 0.06, is: "uniform" },
+    brightnessCutoff: { type: "number", default: 0.82, is: "uniform" },
+    saturationCutoff: { type: "number", default: 0.16, is: "uniform" },
+    edgeSoftness: { type: "number", default: 0.08, is: "uniform" },
   },
 
   vertexShader: `
@@ -20,21 +19,24 @@ AFRAME.registerShader("white-chroma-key", {
     precision mediump float;
 
     uniform sampler2D src;
-    uniform vec3 keyColor;
-    uniform float similarity;
-    uniform float smoothness;
-    uniform float spill;
+    uniform float brightnessCutoff;
+    uniform float saturationCutoff;
+    uniform float edgeSoftness;
     varying vec2 vUv;
 
     void main() {
       vec4 videoColor = texture2D(src, vUv);
-      float diff = distance(videoColor.rgb, keyColor);
-      float alpha = smoothstep(similarity, similarity + smoothness, diff);
+      float maxChannel = max(max(videoColor.r, videoColor.g), videoColor.b);
+      float minChannel = min(min(videoColor.r, videoColor.g), videoColor.b);
+      float saturation = maxChannel - minChannel;
+      float brightness = dot(videoColor.rgb, vec3(0.299, 0.587, 0.114));
 
-      float whiteness = min(min(videoColor.r, videoColor.g), videoColor.b);
-      alpha *= smoothstep(0.78, 0.98, 1.0 - whiteness + spill);
+      float brightMask = smoothstep(brightnessCutoff, brightnessCutoff + edgeSoftness, brightness);
+      float lowSaturationMask = 1.0 - smoothstep(saturationCutoff, saturationCutoff + edgeSoftness, saturation);
+      float backgroundMask = brightMask * lowSaturationMask;
+      float alpha = 1.0 - backgroundMask;
 
-      if (alpha < 0.03) {
+      if (alpha < 0.05) {
         discard;
       }
 
